@@ -95,16 +95,34 @@ pre code {background-color: transparent; padding: 0;}
 .carousel-wrapper {overflow: hidden; width: 100%; position: relative;}
 .carousel-track {display: flex; transition: transform 0.3s ease-in-out;}
 .carousel-item {flex-shrink: 0; padding: 0 8px; box-sizing: border-box; width: 33.333%;}
+#isaacgym-unseen-motions-carousel .carousel-item,
+#isaacgym-test-videos-carousel .carousel-item,
+#mujoco-unseen-motions-carousel .carousel-item,
+#mujoco-test-videos-carousel .carousel-item,
+#gmr-small-carousel .carousel-item,
+#gmr-big-carousel .carousel-item,
+#maskedmimic-imitation-carousel .carousel-item,
+#path-following-carousel .carousel-item,
+#physink-fail-carousel .carousel-item {width: 100% !important; padding: 0;}
+#isaacgym-unseen-motions-carousel .carousel-item video,
+#isaacgym-test-videos-carousel .carousel-item video,
+#mujoco-unseen-motions-carousel .carousel-item video,
+#mujoco-test-videos-carousel .carousel-item video,
+#maskedmimic-imitation-carousel .carousel-item video,
+#path-following-carousel .carousel-item video,
+#physink-fail-carousel .carousel-item video {width: 80%; margin: 0 auto;}
+#gmr-small-carousel .carousel-item video,
+#gmr-big-carousel .carousel-item video {width: 95%; margin: 0 auto;}
 .carousel-item video {width: 100%; height: auto; border-radius: 8px; background-color: #f5f5f5; display: block;}
 .carousel-btn {position: absolute; top: 50%; transform: translateY(-50%); background-color: rgb(54, 54, 54); color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 24px; z-index: 10; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s, background-color 0.3s;}
 .carousel-btn:hover {background-color: rgb(70, 70, 70);}
 .carousel-btn:disabled {opacity: 0.5; cursor: not-allowed;}
-.carousel-btn-left {left: -50px;}
-.carousel-btn-right {right: -50px;}
+.carousel-btn-left {left: -10px;}
+.carousel-btn-right {right: -10px;}
 
 @media (max-width: 1100px) {
-	.carousel-btn-left {left: -20px;}
-	.carousel-btn-right {right: -20px;}
+	.carousel-btn-left {left: -10px;}
+	.carousel-btn-right {right: -10px;}
 }
 
 footer {background-color: #efeff3; width: 100%; margin-top: 32px; padding-top: 16px; padding-bottom: 16px; text-align: center;}

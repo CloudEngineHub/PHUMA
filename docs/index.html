@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="./dataset/css/bulma.min.css">
 	<link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 	
 	<script type="text/javascript">
 		function toggle(id) {
@@ -19,11 +19,17 @@
 		
 		var carouselPositions = {};
 		
+		function getItemsPerView(carouselId) {
+			// PHUMA Examples 섹션의 캐러셀들은 3개씩 보이도록
+			var examplesCarousels = ['stationary-carousel', 'angular-carousel', 'vertical-carousel', 'horizontal-carousel'];
+			return examplesCarousels.indexOf(carouselId) !== -1 ? 3 : 1;
+		}
+		
 		function initCarousel(carouselId) {
 			var wrapper = document.getElementById(carouselId);
 			var track = wrapper.querySelector('.carousel-track');
 			var items = track.querySelectorAll('.carousel-item');
-			var itemsPerView = 3;
+			var itemsPerView = getItemsPerView(carouselId);
 			
 			// CSS에서 이미 width를 설정했으므로 JavaScript에서는 transform만 조정
 			carouselPositions[carouselId] = 0;
@@ -35,7 +41,7 @@
 			var wrapper = document.getElementById(carouselId);
 			var track = wrapper.querySelector('.carousel-track');
 			var items = track.querySelectorAll('.carousel-item');
-			var itemsPerView = 3;
+			var itemsPerView = getItemsPerView(carouselId);
 			var maxPosition = items.length - itemsPerView;
 			
 			if (!carouselPositions.hasOwnProperty(carouselId)) {
@@ -77,6 +83,8 @@
 			initCarousel('angular-carousel');
 			initCarousel('vertical-carousel');
 			initCarousel('horizontal-carousel');
+			initCarousel('maskedmimic-imitation-carousel');
+			initCarousel('path-following-carousel');
 		});
 	</script>
 	<script type="text/x-mathjax-config">
@@ -87,7 +95,7 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
 </head>
 <div class="header" id="top">
-	<h1><span class="bold phuma">PHUMA </span><br/>Physically-Grounded Motion Retarget Dataset<br/>for Humanoid Imitation Learning</h1>
+	<h1><span class="bold phuma">PHUMA </span><br/>Physically-Grounded Humanoid Locomotion Dataset</h1>
 	<h3><a class="bold default-color">Under Review<br/></h3>
 	<table class="authors">
 		<tbody>
@@ -114,7 +122,7 @@
 		</tbody>
 	</table>
 	<div class="links" style="margin-top: -20px;">
-		<a href="https://arxiv.org/abs/2510.26236" class="btn"><i class="fa">&#xf1c1;</i>&ensp;Paper</a><a href="https://github.com/davian-robotics/PHUMA" class="btn"><i class="fa fa-github"></i>&ensp;Code</a><a href="https://huggingface.co/datasets/DAVIAN-Robotics/PHUMA" class="btn"><i class="fa fa-database"></i>&ensp;Dataset</a>
+		<a href="https://arxiv.org/abs/2510.26236" class="btn"><i class="fa">&#xf1c1;</i>&ensp;Paper</a><a href="https://github.com/davian-robotics/PHUMA" class="btn"><i class="fa-brands fa-github"></i>&ensp;Code</a><a href="https://huggingface.co/datasets/DAVIAN-Robotics/PHUMA" class="btn"><i class="fa-solid fa-database"></i>&ensp;Dataset</a><a href="https://x.com/lee_kyungmin21/status/1984335933907546567" class="btn"><i class="fa-brands fa-x-twitter"></i></a>
 	</div>
 	<div class="content-video">
 		<video playsinline="" autoplay="" loop="" preload="" muted="" controls>
@@ -410,21 +418,193 @@ We evaluated <span class="phuma">PHUMA</span> in two sets of conditions: (i) imi
 	<div>
 		<h2>Imitation Performance</h2>
 		<p class="figure-caption">
-			In motion imitation tasks, our policy trained on <span class="phuma">PHUMA</span> outperforms the policy trained on existing datasets, including LAFAN1, AMASS, and Humanoid-X on both humanoids. We use MaskedMimic methods for training.
+			In motion imitation tasks, we train policies on <span class="phuma">PHUMA</span> and AMASS, and evaluate them on unseen motions. We use MaskedMimic for training, and all policies are trained on IsaacGym. The videos below show qualitative motion imitation results using the student policy on unseen motions. The ghost represents the reference motion to be imitated. As shown, the policy trained on <span class="phuma">PHUMA</span> demonstrates better motion imitation performance compared to the policy trained on AMASS.
 		</p>
 		<div class="content" style="margin-top: -20px; text-align: center;">
 			<img src="images/imitation_performance.png" style="max-width: 90%; height: auto; " class="figure">
 		<div>
+			<div class="carousel-container">
+				<button class="carousel-btn carousel-btn-left" onclick="moveCarousel('maskedmimic-imitation-carousel', -1)">&#8249;</button>
+				<div class="carousel-wrapper" id="maskedmimic-imitation-carousel">
+					<div class="carousel-track">
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/bend/humanml_004718_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/bend/humanml_007304_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/jump/LAFAN1_jumps1_subject1_chunk_0016.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/kick/humanml_000369_chunk_0001.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/kick/humanml_002255_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/kick/humanml_010777_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/stand/humanml_007400_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/stand/humanml_010254_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/stand/humanml_013610_chunk_0001.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/twist/humanml_001038_chunk_0001.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/walk/humanml_000597_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/walk/humanml_003248_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/walk/LAFAN1_fight1_subject2_chunk_0035.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/run/LAFAN1_fight1_subject2_chunk_0017.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/run/LAFAN1_run1_subject2_chunk_0017.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/run/LAFAN1_run1_subject2_chunk_0056.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-val/run/LAFAN1_run1_subject5_chunk_0001.mp4" type="video/mp4">
+							</video>
+						</div>
+					</div>
+				</div>
+				<button class="carousel-btn carousel-btn-right" onclick="moveCarousel('maskedmimic-imitation-carousel', 1)">&#8250;</button>
+			</div>
 	</div>
 	<div class="hr"></div>
 	<div>
 		<h2>Path Following Performance</h2>
 		<p class="figure-caption">
-			In path following tasks, our policy trained on <span class="phuma">PHUMA</span> outperforms the policy trained on AMASS. We also use MaskedMimic methods for training.
+			In path following tasks, we distill the teacher policy by providing only the pelvis information (position(blue) and rotation(green)) from the reference motions. We train path following policies on <span class="phuma">PHUMA</span> and AMASS, and evaluate them on unseen paths. The videos below show qualitative path following results using the student policy on unseen paths. 
 		</p>
 		<div class="content" style="margin-top: -20px; text-align: center;">
 			<img src="images/path_following_performance.png" style="max-width: 90%; height: auto; " class="figure">
 		<div>
+			<div class="carousel-container">
+				<button class="carousel-btn carousel-btn-left" onclick="moveCarousel('path-following-carousel', -1)">&#8249;</button>
+				<div class="carousel-wrapper" id="path-following-carousel">
+					<div class="carousel-track">
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/jump/LAFAN1_jumps1_subject1_chunk_0005.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/jump/LAFAN1_jumps1_subject1_chunk_0030.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/squat/fitness_subset_0005_4_Squat_Pulses_1_Jump_clip_2_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/squat/fitness_subset_0027_Chair_Squat_Pulse_To_Lfg_Lift_R_clip_33_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/squat/humanml_012482_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/walk/humanml_001838_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/walk/humanml_001891_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/walk/humanml_002286_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/walk/humanml_003558_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/walk/LAFAN1_walk2_subject1_chunk_0011.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/run/humanml_011839_chunk_0000.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/run/LAFAN1_run1_subject5_chunk_0038.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/run/LAFAN1_run2_subject4_chunk_0051.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div class="carousel-item">
+							<video playsinline="" autoplay="" loop="" preload="" muted="">
+								<source src="videos/maskedmimic-path_following-val/run/LocoMuJoCo_run_chunk_0078.mp4" type="video/mp4">
+							</video>
+						</div>
+					</div>
+				</div>
+				<button class="carousel-btn carousel-btn-right" onclick="moveCarousel('path-following-carousel', 1)">&#8250;</button>
+			</div>
 	</div>
 	
 	<div class="hr"></div>
@@ -441,7 +621,7 @@ We evaluated <span class="phuma">PHUMA</span> in two sets of conditions: (i) imi
 }</code></pre>
 		</div>
 <footer>
-<a href="index.html#top"><i class="fa fa-arrow-up"></i><br/>Return to top</a>
+<a href="index.html#top"><i class="fa-solid fa-arrow-up"></i><br/>Return to top</a>
 <div style="padding-top: 48px;">
 	<span>Website based on <a href="https://nicklashansen.github.io/td-mpc2">TD-MPC2</a>.</span>
 </div>
