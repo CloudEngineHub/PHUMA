@@ -63,10 +63,10 @@ def find_robust_ground(vertices, foot_contact_vertex_indices, ground_thresh=0.05
 
     return np.median(best_h_stars)
 
-def get_foot_contact(vertices, foot_contact_vertex_indices, robust_ground_y, ground_thresh=0.05, heel_offset=0.005):
+def get_foot_contact(vertices, foot_contact_vertex_indices, robust_ground_y, ground_threshold, heel_offset=0.005):
     num_frames = vertices.shape[0]
     foot_contacts = np.zeros((num_frames, len(foot_contact_vertex_indices)), dtype=np.float32)
-    contact_range = [robust_ground_y - ground_thresh / 2.0, robust_ground_y + ground_thresh / 2.0]
+    contact_range = [robust_ground_y - ground_threshold / 2.0, robust_ground_y + ground_threshold / 2.0]
 
     for i in range(num_frames):
         for j, (contact_type, indices) in enumerate(foot_contact_vertex_indices.items()):

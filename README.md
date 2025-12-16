@@ -38,6 +38,11 @@ PHUMA leverages large-scale human motion data while overcoming physical artifact
    pip install -e .
    ```
 
+4. **Setup PHUMA:**
+    ```bash
+    bash setup_phuma.sh
+    ```
+
 ## 📊 Dataset Pipeline
 
 ### 1. Physics-Aware Motion Curation
@@ -216,10 +221,6 @@ To reproduce our reported quantitative results, use the provided data splits loc
 - `phuma_train.txt`
 - `phuma_test.txt` 
 - `unseen_video.txt`
-
-LAFAN1 Retargeted Data: Available [here](https://huggingface.co/datasets/lvhaidong/LAFAN1_Retargeting_Dataset).
-
-LocoMuJoCo Retargeted Data: Available [here](https://github.com/robfiras/loco-mujoco).
 
 For motion tracking and path following tasks, we utilize the codebase from [MaskedMimic](https://github.com/NVlabs/ProtoMotions).
 

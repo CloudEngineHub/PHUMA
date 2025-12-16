@@ -106,7 +106,7 @@ def render_robot_pose(robot_dir, dof_pos, root_pos, root_ori):
     camera = mujoco.MjvCamera()
     camera.type = mujoco.mjtCamera.mjCAMERA_TRACKING
     camera.trackbodyid = 0
-    camera.distance = 3.5
+    camera.distance = 2.5
     camera.elevation = -20.0
     camera.azimuth = -140.0
 

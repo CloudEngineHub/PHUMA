@@ -18,7 +18,8 @@ def parse_args():
     parser.add_argument("--fps", type=int, default=30)
     parser.add_argument("--visualize", type=int, default=0)
     parser.add_argument("--verbose", type=int, default=1)
-
+    
+    parser.add_argument("--ground_threshold", type=float, default=0.05)
     parser.add_argument("--foot_contact_threshold", type=float, default=0.6)
     parser.add_argument("--root_jerk_threshold", type=float, default=50)
     parser.add_argument("--min_pelvis_height_threshold", type=float, default=0.6)
@@ -70,7 +71,7 @@ def main(args):
 
                 robust_ground_y = find_robust_ground(vertices, foot_contact_vertex_indices)
 
-                foot_contacts = get_foot_contact(vertices, foot_contact_vertex_indices, robust_ground_y)
+                foot_contacts = get_foot_contact(vertices, foot_contact_vertex_indices, robust_ground_y, args.ground_threshold)
 
                 motion_parms['transl'][:, 1] -= robust_ground_y
                 joints[..., 1] -= robust_ground_y
