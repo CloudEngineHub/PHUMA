@@ -13,13 +13,13 @@ unzip "$project_dir/data.zip" -d "$project_dir"
 rm "$project_dir/data.zip"
 
 # Download LAFAN1 and LocoMuJoCo datasets
-python src/utils/download_lafan_locomujoco.py --project_dir "$project_dir" --remove_original
+PYTHONPATH="$project_dir/src:$PYTHONPATH" python "$project_dir/src/utils/download_lafan_locomujoco.py" --project_dir "$project_dir" --remove_original
 
 # Preprocess G1 folder
-python src/curation/preprocess_g1_folder.py --project_dir "$project_dir"
+PYTHONPATH="$project_dir/src:$PYTHONPATH" python "$project_dir/src/curation/preprocess_g1_folder.py" --project_dir "$project_dir"
 
 # Preprocess H1_2 folder
-python src/curation/preprocess_h1_2_folder.py --project_dir "$project_dir"
+PYTHONPATH="$project_dir/src:$PYTHONPATH" python "$project_dir/src/curation/preprocess_h1_2_folder.py" --project_dir "$project_dir"
 
 # Remove preprocessed original datasets
 rm -rf "$project_dir/data/preprocessed_original"

@@ -1,10 +1,11 @@
 import os
+import yaml
 import argparse
-from tqdm import tqdm
-import pandas as pd
+
 import numpy as np
 import mujoco
-import yaml
+from tqdm import tqdm
+
 from scipy.spatial import ConvexHull, Delaunay
 from utils.smpl import _point_to_segment_dist
 
