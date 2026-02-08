@@ -19,7 +19,7 @@ from utils.visualize import render_robot_pose, write_video
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--project_dir", type=str, required=True)
-    parser.add_argument("--robot_name", choices=["g1", "h1_2"], required=True)
+    parser.add_argument("--robot_name", type=str, required=True)
     parser.add_argument("--human_pose_file", type=str, required=True)
     parser.add_argument("--visualize", type=int, default=1)
     parser.add_argument("--fps", type=int, default=30)
@@ -240,11 +240,18 @@ def main(args):
             dtype=torch.float32, device=retarget.device) 
         
         pose_batch[0, :, 0, :] = root_ori
+        joint_axes = robot_config.get("joint_axes")
         for k, joint_name in enumerate(robot_config["joint_names"]):
+            if k == 0:
+                continue  # skip free joint entry
             key = joint_name.removesuffix("_joint")
             for l, body_name in enumerate(robot_config["body_names"]):
                 if key in body_name:
-                    pose_batch[0, :, l, robot_config["dof"][k]] = joint_pos[:, k-1]
+                    if joint_axes is not None:
+                        axis = torch.tensor(joint_axes[k], dtype=torch.float32, device=retarget.device)
+                        pose_batch[0, :, l, :] = joint_pos[:, k-1:k] * axis.unsqueeze(0)
+                    else:
+                        pose_batch[0, :, l, robot_config["dof"][k]] = joint_pos[:, k-1]
                     break
 
         output = retarget.robot.kinematics.fk_batch( 

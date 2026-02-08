@@ -39,9 +39,14 @@ PHUMA leverages large-scale human motion data while overcoming physical artifact
    ```
 
 4. **Setup PHUMA:**
+
+    If you just want to download and use the dataset directly:
     ```bash
     bash setup_phuma.sh
     ```
+    This will download the pre-built PHUMA dataset (G1 and H1-2) and you're ready to go.
+
+    If you want to modify or add custom data, or retarget to a custom robot, continue with the full pipeline below.
 
 ## 📊 Dataset Pipeline
 
@@ -55,20 +60,21 @@ We begin with the Humanoid-X collection as described in our paper. For more deta
 <details>
 <summary><strong>ⅰ) Preprocess SMPL-X Data Format</strong></summary>
 
-Motion-X produces SMPL-X data in (N, 322) format, but PHUMA requires (N, 69) format, focusing on body pose and excluding face, hands, etc. If you're processing Motion-X data, you can convert it using our preprocessing script:
+Motion-X produces SMPL-X data in (N, 322) `.npy` format or raw `.npz` format (stageii), but PHUMA requires (N, 69) format, focusing on body pose and excluding face, hands, etc. Our preprocessing script handles both formats automatically:
 
-This script will:
-- Recursively find all `.npy` files in the input folder
-- Convert Motion-X format (N, 322) to PHUMA format (N, 69) by extracting `[transl, global_orient, body_pose]`
-- Preserve the directory structure (e.g., `aist/subset_0008/`) in the output folder
-
-</details>
+- Recursively finds all `.npy` and `.npz` files in the input folder
+- For `.npz` files: converts Motion-X stageii format to (N, 322) with Y-up to Z-up coordinate transformation and FPS downsampling
+- Converts Motion-X format (N, 322) to PHUMA format (N, 69) by extracting `[transl, global_orient, body_pose]`
+- Preserves the directory structure (e.g., `aist/subset_0008/`) in the output folder
 
 ```bash
 python src/curation/preprocess_motionx_format.py \
-    --human_pose_folder /path_to_motionx_folder/subfolder \ # motionx_folder_path/humanml
-    --output_dir data/human_pose
+    --human_pose_folder /path_to_motionx_folder/subfolder \
+    --output_dir data/human_pose \
+    --target_fps 30  # Target FPS for npz downsampling (default: 30)
 ```
+
+</details>
 
 
 <details>
@@ -89,10 +95,8 @@ python src/curation/preprocess_motionx_format.py \
 
 The default thresholds are tuned to preserve motions with airborne phases (e.g., jumping) while filtering out physically implausible motions. This means some motions in PHUMA may contain minor penetration or floating artifacts. If you need stricter filtering for specific locomotion types (e.g., walking only), you can adjust the thresholds:
 
-<details>
-<summary>Single File Version</summary>
-
 - **For single file:**
+
 ```bash
 # Set your project directory
 PROJECT_DIR="[REPLACE_WITH_YOUR_WORKING_DIRECTORY]/PHUMA"
@@ -104,14 +108,12 @@ human_pose_file="example/kick"
 python src/curation/preprocess_smplx.py \
     --project_dir $PROJECT_DIR \
     --human_pose_file $human_pose_file \
-    --foot_contact_threshold 0.8 \  # Default: 0.6. Increase to filter out more floating/penetration
+    --foot_contact_threshold 0.8 \
     --visualize 0
+# foot_contact_threshold: Default 0.6. Increase to filter out more floating/penetration.
 ```
 
-
 - **For folder:**
-
-</details>
 
 ```bash
 # Set your project directory
@@ -123,8 +125,8 @@ human_pose_folder='data/human_pose/example'
 python src/curation/preprocess_smplx_folder.py \
     --project_dir $PROJECT_DIR \
     --human_pose_folder $human_pose_folder \
-    --foot_contact_threshold 0.8 \  # Default: 0.6. Increase to filter out more floating/penetration
-    --visualize 0 \
+    --foot_contact_threshold 0.8 \
+    --visualize 0
 ```
 <details>
 <summary>Output Details</summary>
@@ -138,6 +140,39 @@ For a complete list of tunable parameters, see `src/curation/preprocess_smplx.py
 ### 2. Physics-Constrained Motion Retargeting
 
 To address artifacts introduced during the retargeting process, we employ **PhySINK**, our physics-constrained retargeting method that adapts curated human motion to humanoid robots while enforcing physical plausibility.
+
+#### **2-0) Custom Robot Setup (Optional):**
+
+If you want to retarget to a custom humanoid robot (beyond G1 and H1-2), you first need to generate the required configuration files. Our setup script automatically:
+- Adds heel/toe keypoint bodies to the robot model
+- Computes a T-pose with ground-adjusted root height
+- Generates `custom.xml`, `scene.xml`, and `config.yaml`
+
+```bash
+# From a MuJoCo XML file
+python src/utils/setup_humanoid.py \
+    --input /path/to/your_robot.xml \
+    --humanoid_type your_robot_name
+
+# From a URDF file
+python src/utils/setup_humanoid.py \
+    --input /path/to/your_robot.urdf \
+    --humanoid_type your_robot_name
+
+# If foot bodies are not auto-detected, specify them manually
+python src/utils/setup_humanoid.py \
+    --input /path/to/your_robot.xml \
+    --humanoid_type your_robot_name \
+    --left_foot_body left_ankle_roll_link \
+    --right_foot_body right_ankle_roll_link
+```
+
+**Output:** Configuration files saved to `asset/humanoid_model/<your_robot_name>/`
+- `custom.xml` — Robot model with heel/toe keypoints
+- `scene.xml` — MuJoCo scene file
+- `config.yaml` — Robot configuration (keypoints, bone mapping, joint info, T-pose)
+
+> **Note:** After generation, review `config.yaml` and verify that the bone mappings and keypoints are correct for your robot.
 
 #### **2-1) Shape Adaptation (One-time Setup):**
 ```bash
@@ -154,14 +189,10 @@ python src/retarget/shape_adaptation.py \
 
 This step retargets human motion to robot motion using PhySINK optimization. You can process either a single file or an entire folder.
 
-<details>
-<summary>Single File Version</summary>
-
 - **For single file:**
 
 ```bash
 # Using the curated data from the previous step for Unitree G1 humanoid robot
-
 human_pose_preprocessed_file="example/kick_chunk_0000"
 
 python src/retarget/motion_adaptation.py \
@@ -171,8 +202,6 @@ python src/retarget/motion_adaptation.py \
 ```
 
 - **For folder (with multiprocessing support):**
-
-</details>
 
 ```bash
 human_pose_preprocessed_folder="data/human_pose_preprocessed/example"
@@ -211,9 +240,9 @@ python src/retarget/motion_adaptation_multiprocess.py \
 
 </details>
 
-#### **✩ Custom Robot Support:** 
+#### **✩ Custom Robot Support:**
 
-We support Unitree G1 and H1-2, but you can also retarget to custom humanoid robots. See our [Custom Robot Integration Guide](asset/humanoid_model/README.md) for details.
+We support Unitree G1 and H1-2, but you can also retarget to custom humanoid robots. See [**2-0) Custom Robot Setup**](#2-0-custom-robot-setup-optional) above to generate the required configuration files, then run the shape and motion adaptation steps as usual with your `--robot_name`.
 
 ## 🎯 Motion Tracking and Evaluation
 
@@ -241,7 +270,7 @@ A: The default threshold values in the curation stage are tuned to preserve moti
 
 **Q: Can I retarget motions to custom humanoid robots using the PHUMA pipeline?**
 
-A: Yes! While PHUMA dataset is provided for Unitree G1 and H1-2, you can use our PhySINK retargeting pipeline with custom robots by following our [Custom Robot Integration Guide](asset/humanoid_model/README.md). The guide covers adding heel/toe keypoints, creating configuration files, and tuning the retargeting process for your robot.
+A: Yes! While PHUMA dataset is provided for Unitree G1 and H1-2, you can use our PhySINK retargeting pipeline with custom robots. See [**2-0) Custom Robot Setup**](#2-0-custom-robot-setup-optional) to generate configuration files from your robot's XML/URDF, then run the shape and motion adaptation steps with your `--robot_name`.
 
 </details>
 
