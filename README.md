@@ -11,7 +11,28 @@
 
 PHUMA leverages large-scale human motion data while overcoming physical artifacts through careful data curation and physics-constrained retargeting to create a high-quality humanoid locomotion dataset.
 
+## 📰 News
+
+- **[2025.12]** PHUMA is now natively supported in NVIDIA's [ProtoMotions](https://github.com/NVlabs/ProtoMotions)! You can train policies directly on PHUMA — see the [PHUMA Data Preparation guide](https://github.com/NVlabs/ProtoMotions/blob/main/docs/source/getting_started/phuma_preparation.rst).
+
 ## 🚀 Quick Start
+
+**Just want the dataset?** Run the following (requires Python 3.9 + Conda):
+
+```bash
+git clone https://github.com/DAVIAN-Robotics/PHUMA.git && cd PHUMA
+conda create -n phuma python=3.9 -y && conda activate phuma
+pip install -r requirements.txt && pip install -e .
+bash download_phuma.sh
+```
+
+This downloads the pre-built PHUMA dataset (G1 and H1-2), and you're ready to go.
+
+> **Want more?** To modify/add custom data, or retarget to a custom robot,
+> continue with the [Dataset Pipeline](#-dataset-pipeline) below.
+
+<details>
+<summary><strong>Step-by-step installation (with explanations)</strong></summary>
 
 ### Prerequisites
 - Python 3.9
@@ -38,15 +59,15 @@ PHUMA leverages large-scale human motion data while overcoming physical artifact
    pip install -e .
    ```
 
-4. **Setup PHUMA:**
+4. **Download PHUMA:**
+   ```bash
+   bash download_phuma.sh
+   ```
+   This downloads the pre-built PHUMA dataset (G1 and H1-2). Internally it
+   fetches the data from Hugging Face, then runs the LAFAN1/LocoMuJoCo
+   download and G1/H1-2 preprocessing — so steps 1–3 must be completed first.
 
-    If you just want to download and use the dataset directly:
-    ```bash
-    bash setup_phuma.sh
-    ```
-    This will download the pre-built PHUMA dataset (G1 and H1-2) and you're ready to go.
-
-    If you want to modify or add custom data, or retarget to a custom robot, continue with the full pipeline below.
+</details>
 
 ## 📊 Dataset Pipeline
 
