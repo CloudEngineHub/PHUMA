@@ -1,4 +1,4 @@
-# PHUMA: Physically-Grounded Humanoid Locomotion Dataset
+# PHUMA: Physically Reliable Humanoid Locomotion Dataset
 
 [![arXiv](https://img.shields.io/badge/arXiv-2510.26236-b31b1b.svg)](https://arxiv.org/abs/2510.26236)
 [![Project Page](https://img.shields.io/badge/Project_Page-Visit-blue.svg)](https://davian-robotics.github.io/PHUMA/)
