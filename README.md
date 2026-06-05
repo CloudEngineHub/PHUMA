@@ -4,7 +4,7 @@
 [![Project Page](https://img.shields.io/badge/Project_Page-Visit-blue.svg)](https://davian-robotics.github.io/PHUMA/)
 [![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset-yellow)](https://huggingface.co/datasets/DAVIAN-Robotics/PHUMA)
 
-> [Kyungmin Lee\*](https://kyungminn.github.io/), [Sibeen Kim\*](https://sibisibi.github.io/), [Minho Park](https://pmh9960.github.io/), [Hyunseung Kim](https://mynsng.github.io/), [Dongyoon Hwang](https://godnpeter.github.io/), [Hojoon Lee](https://joonleesky.github.io/), and [Jaegul Choo](https://sites.google.com/site/jaegulchoo/)
+> [Kyungmin Lee\*](https://kyungminn.github.io/), [Sibeen Kim\*](https://sibisibi.github.io/), [Youngdo Lee](https://leeyngdo.github.io/), [Minho Park](https://pmh9960.github.io/), [Hyunseung Kim](https://mynsng.github.io/), [Dongyoon Hwang](https://godnpeter.github.io/), [Donghu Kim](https://i-am-proto.github.io/), [Hojoon Lee](https://joonleesky.github.io/), and [Jaegul Choo](https://sites.google.com/site/jaegulchoo/)
 > 
 > **DAVIAN Robotics, KAIST AI**  
 > arXiv 2025. (\* indicates equal contribution)
@@ -301,8 +301,8 @@ If you use this dataset or code in your research, please cite our paper:
 
 ```bibtex
 @article{lee2025phuma,
-  title={PHUMA: Physically-Grounded Humanoid Locomotion Dataset},
-  author={Kyungmin Lee and Sibeen Kim and Minho Park and Hyunseung Kim and Dongyoon Hwang and Hojoon Lee and Jaegul Choo},
+  title={PHUMA: Physically Reliable Humanoid Locomotion Dataset},
+  author={Kyungmin Lee and Sibeen Kim and Youngdo Lee and Minho Park and Hyunseung Kim and Dongyoon Hwang and Donghu Kim and Hojoon Lee and Jaegul Choo},
   journal={arXiv preprint arXiv:2510.26236},
   year={2025},
 }
